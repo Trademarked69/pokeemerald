@@ -1,0 +1,3 @@
+[submodule "src/gba-rumble"]
+	path = src/gba-rumble
+	url = https://github.com/Trademarked69/gba-rumble
