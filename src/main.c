@@ -378,8 +378,10 @@ static void VBlankIntr(void)
     UpdateWirelessStatusIndicatorSprite();
 
 #ifdef RUMBLE
-    if (!IsSEPlaying())
-        rumble_stop_sfx();
+    if (rumble_get_mode() == RUMBLE_SFX) {
+        if (!IsSEPlaying() && !IsCryPlaying())
+            rumble_stop_sfx();
+    }
 #endif
 
     INTR_CHECK |= INTR_FLAG_VBLANK;

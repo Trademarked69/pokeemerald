@@ -22,6 +22,10 @@
 #include "constants/songs.h"
 #include "constants/rgb.h"
 
+#ifdef RUMBLE
+#include "rumble.h"
+#endif
+
 // iwram
 COMMON_DATA u32 gMonShrinkDuration = 0;
 COMMON_DATA u16 gMonShrinkDelta = 0;
@@ -1117,6 +1121,9 @@ static void SpriteCB_Ball_Wobble(struct Sprite *sprite)
         gBattleSpritesDataPtr->animationData->ballSubpx = 0;
         sprite->callback = SpriteCB_Ball_Wobble_Step;
         PlaySE(SE_BALL);
+#ifdef RUMBLE
+        rumble_start_sfx();
+#endif
     }
 }
 
@@ -1272,6 +1279,9 @@ static void SpriteCB_Ball_Wobble_Step(struct Sprite *sprite)
                 StartSpriteAffineAnim(sprite, BALL_ROTATE_RIGHT);
 
             PlaySE(SE_BALL);
+#ifdef RUMBLE
+            rumble_start_sfx();
+#endif
         }
         break;
     }
@@ -1478,6 +1488,9 @@ static void SpriteCB_Ball_Release_Step(struct Sprite *sprite)
     {
     case 0 ... POKEBALL_COUNT - 1:
         AnimateBallOpenParticles(sprite->x, sprite->y - 5, 1, 28, ballId);
+#ifdef RUMBLE
+        rumble_start_sfx();
+#endif
         LaunchBallFadeMonTask(TRUE, gBattleAnimTarget, 14, ballId);
         break;
     }

@@ -370,6 +370,45 @@ void PlayCry_Script(u16 species, u8 mode)
     RestoreBGMVolumeAfterPokemonCry();
 }
 
+static const u16 sLegendarySpecies[] = {
+    // Gen 1
+    SPECIES_ARTICUNO,
+    SPECIES_ZAPDOS,
+    SPECIES_MOLTRES,
+    SPECIES_MEWTWO,
+    SPECIES_MEW,
+    // Gen 2
+    SPECIES_RAIKOU,
+    SPECIES_ENTEI,
+    SPECIES_SUICUNE,
+    SPECIES_LUGIA,
+    SPECIES_HO_OH,
+    SPECIES_CELEBI,
+    // Gen 3
+    SPECIES_REGIROCK,
+    SPECIES_REGICE,
+    SPECIES_REGISTEEL,
+    SPECIES_LATIAS,
+    SPECIES_LATIOS,
+    SPECIES_KYOGRE,
+    SPECIES_GROUDON,
+    SPECIES_RAYQUAZA,
+    SPECIES_JIRACHI,
+    SPECIES_DEOXYS,
+};
+
+bool8 IsLegendarySpecies(u16 species) {
+    u32 i;
+
+    for (i = 0; i < ARRAY_COUNT(sLegendarySpecies); i++)
+    {
+        if (species == sLegendarySpecies[i])
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
 void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
 {
     bool32 reverse;
@@ -379,6 +418,10 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
     u32 chorus;
     u32 index;
     u8 table;
+
+#ifdef RUMBLE
+    bool8 legendary = IsLegendarySpecies(species);
+#endif
 
     species--;
 
@@ -495,6 +538,11 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
         break;
     }
 
+#ifdef RUMBLE
+    if (legendary && mode == CRY_MODE_ENCOUNTER)
+        rumble_start_sfx();
+#endif
+
     #undef GET_CRY
 }
 
@@ -576,7 +624,15 @@ void PlayBGM(u16 songNum)
 void PlaySE(u16 songNum)
 {
 #ifdef RUMBLE
-    rumble_start_sfx();
+    switch (songNum) {
+        case SE_BALL_BOUNCE_1:
+        case SE_BALL_BOUNCE_2:
+        case SE_BALL_BOUNCE_3:
+        case SE_BALL_BOUNCE_4:
+        case SE_RG_BALL_CLICK:
+        rumble_start_sfx();
+        break;
+    }
 #endif
     m4aSongNumStart(songNum);
 }
