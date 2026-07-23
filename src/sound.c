@@ -8,6 +8,10 @@
 #include "constants/songs.h"
 #include "task.h"
 
+#ifdef RUMBLE
+#include "rumble.h"
+#endif
+
 struct Fanfare
 {
     u16 songNum;
@@ -571,6 +575,9 @@ void PlayBGM(u16 songNum)
 
 void PlaySE(u16 songNum)
 {
+#ifdef RUMBLE
+    rumble_start_sfx();
+#endif
     m4aSongNumStart(songNum);
 }
 

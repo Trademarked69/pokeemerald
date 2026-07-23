@@ -25,6 +25,10 @@
 #include "trainer_hill.h"
 #include "constants/rgb.h"
 
+#ifdef RUMBLE
+#include "rumble.h"
+#endif
+
 static void VBlankIntr(void);
 static void HBlankIntr(void);
 static void VCountIntr(void);
@@ -102,6 +106,9 @@ void AgbMain(void)
     EnableVCountIntrAtLine150();
     InitRFU();
     RtcInit();
+#ifdef RUMBLE
+    rumble_init(NULL); // TODO: Gameboy Player 
+#endif
     CheckForFlashMemory();
     InitMainCallbacks();
     InitMapMusic();
@@ -164,6 +171,9 @@ void AgbMain(void)
 
         PlayTimeCounter_Update();
         MapMusicMain();
+#ifdef RUMBLE
+        rumble_update();
+#endif
         WaitForVBlank();
     }
 }
@@ -366,6 +376,11 @@ static void VBlankIntr(void)
         Random();
 
     UpdateWirelessStatusIndicatorSprite();
+
+#ifdef RUMBLE
+    if (!IsSEPlaying())
+        rumble_stop_sfx();
+#endif
 
     INTR_CHECK |= INTR_FLAG_VBLANK;
     gMain.intrCheck |= INTR_FLAG_VBLANK;

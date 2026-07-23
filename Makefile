@@ -14,6 +14,8 @@ BUILD_DIR := build
 MODERN      ?= 0
 # Compares the ROM to a checksum of the original - only makes sense using when non-modern
 COMPARE     ?= 0
+# Adds Rumble functionality 
+RUMBLE      ?= 1
 
 ifeq (modern,$(MAKECMDGOALS))
   MODERN := 1
@@ -112,7 +114,7 @@ INCLUDE_CPP_ARGS := $(INCLUDE_DIRS:%=-iquote %)
 INCLUDE_SCANINC_ARGS := $(INCLUDE_DIRS:%=-I %)
 
 O_LEVEL ?= 2
-CPPFLAGS := $(INCLUDE_CPP_ARGS) -Wno-trigraphs -DMODERN=$(MODERN)
+CPPFLAGS := $(INCLUDE_CPP_ARGS) -Wno-trigraphs -DMODERN=$(MODERN) -DRUMBLE=$(RUMBLE)
 ifeq ($(MODERN),0)
   CPPFLAGS += -I tools/agbcc/include -I tools/agbcc -nostdinc -undef -std=gnu89
   CC1 := tools/agbcc/bin/agbcc$(EXE)
@@ -128,6 +130,12 @@ else
   LIBPATH := -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libgcc.a))" -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libnosys.a))" -L "$(dir $(shell $(PATH_MODERNCC) -mthumb -print-file-name=libc.a))"
   LIB := $(LIBPATH) -lc -lnosys -lgcc -L../../libagbsyscall -lagbsyscall
 endif
+
+# Add Rumble if set
+ifeq ($(RUMBLE),1)
+CPPFLAGS += -I src/gba-rumble
+endif
+
 # Enable debug info if set
 ifeq ($(DINFO),1)
   override CFLAGS += -g
