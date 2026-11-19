@@ -133,7 +133,7 @@ endif
 
 # Add Rumble if set
 ifeq ($(RUMBLE),1)
-CPPFLAGS += -I src/gba-rumble
+CPPFLAGS += -I src/gba-rumble/include
 endif
 
 # Enable debug info if set

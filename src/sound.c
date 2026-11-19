@@ -540,7 +540,7 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
 
 #ifdef RUMBLE
     if (legendary && mode == CRY_MODE_ENCOUNTER)
-        rumble_start_sfx();
+        rumble_start_sfx(100);
 #endif
 
     #undef GET_CRY
@@ -630,7 +630,7 @@ void PlaySE(u16 songNum)
         case SE_BALL_BOUNCE_3:
         case SE_BALL_BOUNCE_4:
         case SE_RG_BALL_CLICK:
-        rumble_start_sfx();
+        rumble_start_sfx(100);
         break;
     }
 #endif

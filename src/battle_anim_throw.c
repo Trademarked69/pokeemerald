@@ -1122,7 +1122,7 @@ static void SpriteCB_Ball_Wobble(struct Sprite *sprite)
         sprite->callback = SpriteCB_Ball_Wobble_Step;
         PlaySE(SE_BALL);
 #ifdef RUMBLE
-        rumble_start_sfx();
+        rumble_start_sfx(100);
 #endif
     }
 }
@@ -1280,7 +1280,7 @@ static void SpriteCB_Ball_Wobble_Step(struct Sprite *sprite)
 
             PlaySE(SE_BALL);
 #ifdef RUMBLE
-            rumble_start_sfx();
+            rumble_start_sfx(100);
 #endif
         }
         break;
@@ -1489,7 +1489,7 @@ static void SpriteCB_Ball_Release_Step(struct Sprite *sprite)
     case 0 ... POKEBALL_COUNT - 1:
         AnimateBallOpenParticles(sprite->x, sprite->y - 5, 1, 28, ballId);
 #ifdef RUMBLE
-        rumble_start_sfx();
+        rumble_start_sfx(100);
 #endif
         LaunchBallFadeMonTask(TRUE, gBattleAnimTarget, 14, ballId);
         break;

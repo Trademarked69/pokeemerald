@@ -107,7 +107,7 @@ void AgbMain(void)
     InitRFU();
     RtcInit();
 #ifdef RUMBLE
-    rumble_init(NULL); // TODO: Gameboy Player 
+    rumble_init(GPIO_RUMBLE, NULL); // TODO: Gameboy Player
 #endif
     CheckForFlashMemory();
     InitMainCallbacks();
